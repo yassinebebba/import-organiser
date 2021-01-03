@@ -26,7 +26,9 @@ def organise_my_imports(file):
 	with open(file, 'r', encoding='utf-8') as f:
 		for i in f:
 			if re.search(import_pattern, i):
-				import_list.append(i.replace("\n", ""))
+				i = i.replace("\n", ",")
+				for j in re.findall(from_pattern_chunks, i):
+					import_list.append(j)
 			elif re.search(from_pattern, i):
 				from_list.append(i.replace("\n", ","))
 			else:
@@ -45,7 +47,7 @@ def organise_my_imports(file):
 
 		with open(f'organised_{f.name}', 'w', encoding='utf-8') as file:
 			for i in sorted(import_list):
-				file.write(f'{i}\n')
+				file.write(f'import {i}\n')
 			for i in sorted(from_pattern_chunks_list):
 				for j in i[1:]:
 					file.write(f'{i[0]} import {j}\n')
@@ -55,4 +57,3 @@ def organise_my_imports(file):
 					file.write('\n')
 
 organise_my_imports()
-
